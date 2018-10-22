@@ -6,33 +6,89 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/text_executed_count_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Test workmanager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:text="# executed"
+        android:textSize="25sp"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintEnd_toStartOf="@id/text_executed_count"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/cancelButton"
+    <TextView
+        android:id="@+id/text_executed_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel Work"
-        app:layout_constraintTop_toBottomOf="@id/button"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:layout_marginStart="16dp"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/text_executed_count_label"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="0" />
 
     <TextView
-        android:id="@+id/counter"
+        android:id="@+id/text_scheduled_count_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
-        android:textSize="30sp"
+        android:text="# scheduled"
+        android:textSize="25sp"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintEnd_toStartOf="@id/text_scbeduled_count"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_executed_count"
+         />
+
+    <TextView
+        android:id="@+id/text_scbeduled_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/text_scheduled_count_label"
+        app:layout_constraintTop_toBottomOf="@id/text_executed_count_label"
+        tools:text="0" />
+
+    <Button
+        android:id="@+id/button_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enqueue now"
+        android:layout_marginTop="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/button"/>
+        app:layout_constraintTop_toBottomOf="@id/text_scheduled_count_label" />
+
+    <Button
+        android:id="@+id/button_future"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enqueue 1 day from now"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_now" />
+
+    <Button
+        android:id="@+id/button_periodic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enqueue Periodic work"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_future"
+        />
+
+    <Button
+        android:id="@+id/button_cancel_works"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel works"
+        android:layout_marginTop="26dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_periodic"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

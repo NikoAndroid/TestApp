@@ -1,41 +1,58 @@
 package mctesterson.testy.workmanager_test
 
+import android.app.job.JobScheduler
+import android.content.Context
 import android.util.Log
 import androidx.work.Constraints
-import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
-import java.util.*
+import androidx.work.WorkerParameters
 import java.util.concurrent.TimeUnit
 
-class MainWorker: Worker() {
+class MainWorker(context: Context, params: WorkerParameters): Worker(context, params) {
 
     companion object {
         private const val TAG = "MainWorker"
         const val WORK_TAG = "${TAG}Work"
-        private var mCounter = 0
+        private var totalWorkExecuted = 0
 
 
-        fun submitNewWork(): UUID {
-            val delay = 6L
+        fun submitNewWork(appContext: Context, shouldDelay: Boolean) {
+            val delay = 1L // 1 day
             Log.d(TAG, "Submitting work delayed $delay seconds")
             val constraints = Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
                     .build()
 
             val worker = OneTimeWorkRequest.Builder(MainWorker::class.java)
                     .setConstraints(constraints)
                     .addTag(WORK_TAG)
-                    .setInitialDelay(delay, TimeUnit.SECONDS)
-                    .build()
-            WorkManager.getInstance().enqueue(worker)
-            return worker.id
+
+            if (shouldDelay) {
+                worker.setInitialDelay(delay, TimeUnit.DAYS)
+            }
+            WorkManager.getInstance().enqueue(worker.build())
+            CounterSingleton.getTotalEnqueued().postValue(getNumberWorksQueued(appContext))
+        }
+
+        fun submitPeriodicWork(appContext: Context) {
+            Log.d(TAG, "Submitting periodic work")
+
+            val worker = PeriodicWorkRequest.Builder(MainWorker::class.java, 1, TimeUnit.DAYS)
+                    .addTag(WORK_TAG)
+            WorkManager.getInstance().enqueue(worker.build())
+            CounterSingleton.getTotalEnqueued().postValue(getNumberWorksQueued(appContext))
         }
 
         fun cancelWork() {
             Log.d(TAG, "Cancelling work")
             WorkManager.getInstance().cancelAllWorkByTag(WORK_TAG)
+        }
+
+        fun getNumberWorksQueued(appContext: Context): Int {
+            val jobScheduler = appContext.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+            return jobScheduler.allPendingJobs.count()
         }
     }
 
@@ -43,10 +60,8 @@ class MainWorker: Worker() {
     override fun doWork(): Result {
         Log.d(TAG, "doing work")
 
-
-        CounterSingleton.getCount().postValue(++mCounter)
-
-        submitNewWork()
+        CounterSingleton.getTotalExecuted().postValue(++totalWorkExecuted)
+        CounterSingleton.getTotalEnqueued().postValue(getNumberWorksQueued(applicationContext))
         return Result.SUCCESS
     }
 }
