@@ -34,11 +34,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // init workmanager
-        val workmanagerConfig = Configuration.Builder()
-        //workmanagerConfig.setMaxSchedulerLimit(50)
-        WorkManager.initialize(applicationContext, workmanagerConfig.build())
-
         buttonEnqueueNow = findViewById(R.id.button_now)
         buttonEnqueueNow.setOnClickListener { _ ->
             MainWorker.submitNewWork(applicationContext, false)

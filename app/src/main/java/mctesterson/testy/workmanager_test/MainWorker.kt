@@ -20,7 +20,7 @@ class MainWorker(context: Context, params: WorkerParameters): Worker(context, pa
 
 
         fun submitNewWork(appContext: Context, shouldDelay: Boolean) {
-            val delay = 1L // 1 day
+            val delay = 30L // seconds
             Log.d(TAG, "Submitting work delayed $delay seconds")
             val constraints = Constraints.Builder()
                     .build()
@@ -30,7 +30,7 @@ class MainWorker(context: Context, params: WorkerParameters): Worker(context, pa
                     .addTag(WORK_TAG)
 
             if (shouldDelay) {
-                worker.setInitialDelay(delay, TimeUnit.DAYS)
+                worker.setInitialDelay(delay, TimeUnit.SECONDS)
             }
             WorkManager.getInstance().enqueue(worker.build())
             CounterSingleton.getTotalEnqueued().postValue(getNumberWorksQueued(appContext))
