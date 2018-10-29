@@ -4,6 +4,7 @@ import android.app.job.JobScheduler
 import android.content.Context
 import android.util.Log
 import androidx.work.Constraints
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
@@ -21,7 +22,6 @@ class MainWorker(context: Context, params: WorkerParameters): Worker(context, pa
 
         fun submitNewWork(appContext: Context, shouldDelay: Boolean) {
             val delay = 30L // seconds
-            Log.d(TAG, "Submitting work delayed $delay seconds")
             val constraints = Constraints.Builder()
                     .build()
 
@@ -30,7 +30,10 @@ class MainWorker(context: Context, params: WorkerParameters): Worker(context, pa
                     .addTag(WORK_TAG)
 
             if (shouldDelay) {
+                Log.d(TAG, "Submitting work delayed $delay seconds")
                 worker.setInitialDelay(delay, TimeUnit.SECONDS)
+            } else {
+                Log.d(TAG, "Submitting work with no delay")
             }
             WorkManager.getInstance().enqueue(worker.build())
             CounterSingleton.getTotalEnqueued().postValue(getNumberWorksQueued(appContext))

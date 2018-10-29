@@ -10,6 +10,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.work.Configuration
 import androidx.work.WorkManager
+import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobRequest
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,8 +28,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var buttonEnqueueFuture: Button
     private lateinit var buttonPeriodicWork: Button
     private lateinit var buttonCancelWorks: Button
+    private lateinit var buttonCancelEvernoteJobs: Button
     private lateinit var textTotalEnqueued: TextView
     private lateinit var textTotalExecuted: TextView
+    private lateinit var buttonEvernoteDailyJob: Button
 
     //private lateinit var mModel: CountViewModel
 
@@ -73,6 +78,17 @@ class MainActivity : AppCompatActivity() {
         buttonCancelWorks.setOnClickListener { _ ->
             Log.d(TAG, "Cancelling all works by tag")
             MainWorker.cancelWork()
+        }
+
+        buttonCancelEvernoteJobs = findViewById(R.id.button_cancel_evernote_jobs)
+        buttonCancelEvernoteJobs.setOnClickListener { _ ->
+            Log.d(TAG, "Cancelling all evernote jobs")
+            JobManager.create(applicationContext).cancelAllForTag(EvernoteJob.TAG)
+        }
+
+        buttonEvernoteDailyJob = findViewById(R.id.button_enqueue_evernote_job)
+        buttonEvernoteDailyJob.setOnClickListener { _ ->
+            EvernoteJob.scheduleDailyJob()
         }
 
 
