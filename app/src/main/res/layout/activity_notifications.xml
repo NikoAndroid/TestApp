@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NotificationsActivity">
+
+
+    <!--  Channels  -->
+    <TextView
+        android:id="@+id/text_channel_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notification channels"
+        android:textSize="20sp"
+        android:layout_margin="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/button_system_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="System settings"
+        android:onClick="openSystemSettings"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/text_channel_header"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_channel_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Channel name/Id"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/text_channel_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/channel_importance" />
+
+    <Spinner
+        android:id="@+id/channel_importance"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        app:layout_constraintTop_toTopOf="@id/edit_channel_name"
+        app:layout_constraintStart_toEndOf="@id/edit_channel_name"
+        app:layout_constraintEnd_toStartOf="@id/checkbox_vibrate"/>
+
+    <CheckBox
+        android:id="@+id/checkbox_vibrate"
+        android:text="Vibrate"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:onClick="onVibrationChange"
+        app:layout_constraintTop_toTopOf="@id/edit_channel_name"
+        app:layout_constraintBottom_toBottomOf="@id/edit_channel_name"
+        app:layout_constraintStart_toEndOf="@id/channel_importance"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/button_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create channel"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="8dp"
+        android:onClick="createChannel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/button_delete"
+        app:layout_constraintTop_toBottomOf="@id/edit_channel_name" />
+
+    <Button
+        android:id="@+id/button_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete channel"
+        android:layout_marginStart="8dp"
+        android:onClick="deleteChannel"
+        app:layout_constraintStart_toEndOf="@id/button_create"
+        app:layout_constraintEnd_toStartOf="@id/button_delete_all"
+        app:layout_constraintTop_toTopOf="@id/button_create" />
+
+    <Button
+        android:id="@+id/button_delete_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete all"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="deleteAllChannels"
+        app:layout_constraintStart_toEndOf="@id/button_delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/button_create" />
+
+
+    <!-- Notifications -->
+    <TextView
+        android:id="@+id/text_notifications_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Sending notifications"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/button_create"
+        app:layout_constraintStart_toStartOf="@id/text_channel_header"/>
+
+    <EditText
+        android:id="@+id/edit_notification_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:hint="Enter notificationId"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/text_notifications_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/edit_notification_tag" />
+
+
+    <EditText
+        android:id="@+id/edit_notification_tag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter tag (optional)"
+        app:layout_constraintTop_toTopOf="@id/edit_notification_id"
+        app:layout_constraintStart_toEndOf="@id/edit_notification_id"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_notification_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Notification title"
+        android:hint="Enter notification title"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/edit_notification_id"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_notification_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Notification message"
+        android:hint="Enter notification message"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/edit_notification_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send dummy notification"
+        android:layout_marginTop="16dp"
+        android:onClick="sendNotification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_notification_message" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

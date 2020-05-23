@@ -1,4 +1,4 @@
-package mctesterson.testy.testapp
+package mctesterson.testy.testapp.workmanager
 
 import android.util.Log
 import com.evernote.android.job.Job
@@ -12,7 +12,7 @@ class EvernoteJob: Job() {
 
         fun scheduleDailyJob() {
             Log.d(TAG, "scheduling evernote daily job")
-            JobRequest.Builder(EvernoteJob.TAG)
+            JobRequest.Builder(TAG)
                     .setUpdateCurrent(false)
                     .setPeriodic(TimeUnit.MINUTES.toMillis(15))
                     .build()

@@ -3,4 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="notificationLED">#ff8833</color>
+    <color name="notificationIconcolor">#ff8833</color>
 </resources>

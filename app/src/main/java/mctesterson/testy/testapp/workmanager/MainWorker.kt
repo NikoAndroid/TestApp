@@ -1,4 +1,4 @@
-package mctesterson.testy.testapp
+package mctesterson.testy.testapp.workmanager
 
 import android.annotation.SuppressLint
 import android.app.job.JobScheduler
@@ -13,6 +13,7 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.evernote.android.job.JobManager
+import mctesterson.testy.testapp.WorkManagerCounterSingleton
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
@@ -52,7 +53,7 @@ class MainWorker(context: Context, params: WorkerParameters): Worker(context, pa
             Log.d("NIKO", "enqueing worker with id=${builtWorker.id}  other id=${builtWorker.workSpec.id}")
             WorkManager.getInstance().enqueue(builtWorker)
 //            WorkManager.getInstance().beginUniqueWork(WORK_TAG, ExistingWorkPolicy.KEEP, worker.build()).enqueue()
-            CounterSingleton.getTotalEnqueued().postValue(getNumberWorksQueued(appContext))
+            WorkManagerCounterSingleton.getTotalEnqueued().postValue(getNumberWorksQueued(appContext))
         }
 
         @SuppressLint("RestrictedApi")
@@ -66,7 +67,7 @@ class MainWorker(context: Context, params: WorkerParameters): Worker(context, pa
 
             Log.d("NIKO", "enqueing worker with id=${builtWorker.id}  other id=${builtWorker.workSpec.id}")
             WorkManager.getInstance().enqueue(builtWorker)
-            CounterSingleton.getTotalEnqueued().postValue(getNumberWorksQueued(appContext))
+            WorkManagerCounterSingleton.getTotalEnqueued().postValue(getNumberWorksQueued(appContext))
         }
 
         fun cancelWork() {
@@ -154,8 +155,8 @@ class MainWorker(context: Context, params: WorkerParameters): Worker(context, pa
     override fun doWork(): Result {
         Log.d(TAG, "doing work")
 
-        CounterSingleton.getTotalExecuted().postValue(++totalWorkExecuted)
-        CounterSingleton.getTotalEnqueued().postValue(getNumberWorksQueued(applicationContext))
+        WorkManagerCounterSingleton.getTotalExecuted().postValue(++totalWorkExecuted)
+        WorkManagerCounterSingleton.getTotalEnqueued().postValue(getNumberWorksQueued(applicationContext))
 
         //submitNewWork(applicationContext, false)
         return Result.success()

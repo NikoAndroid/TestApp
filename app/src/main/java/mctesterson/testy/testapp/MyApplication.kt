@@ -2,6 +2,8 @@ package mctesterson.testy.testapp
 
 import android.app.Application
 import com.evernote.android.job.JobManager
+import mctesterson.testy.testapp.notifications.NotificationDismissedReceiver
+import mctesterson.testy.testapp.workmanager.EvernoteJobCreator
 
 
 class MyApplication : Application() {
@@ -14,5 +16,7 @@ class MyApplication : Application() {
 //                        .setMinimumLoggingLevel(Log.VERBOSE)
 //                        .setMaxSchedulerLimit(20)
 //                        .build())
+
+        applicationContext.registerReceiver(NotificationDismissedReceiver(), NotificationDismissedReceiver.getIntentFilters())
     }
 }

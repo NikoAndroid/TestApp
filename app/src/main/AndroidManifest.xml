@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name="mctesterson.testy.testapp.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,13 +19,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="mctesterson.testy.testapp.WorkManagerActivity" />
+        <activity android:name="mctesterson.testy.testapp.NotificationsActivity" />
+
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
             tools:node="remove"/>
+
         <provider
             android:authorities="${applicationId}.workmanager-init"
-            android:name="mctesterson.testy.testapp.WorkManagerInitializer"/>
+            android:name="mctesterson.testy.testapp.workmanager.WorkManagerInitializer"/>
+
+        <service android:name=".notifications.NotificationActionService" />
     </application>
 
 </manifest>
