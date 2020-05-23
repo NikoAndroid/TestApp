@@ -1,4 +1,4 @@
-package mctesterson.testy.workmanager_test
+package mctesterson.testy.testapp
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -17,31 +17,31 @@ import androidx.work.WorkManager;
  */
 
 class WorkManagerInitializer : ContentProvider() {
-    override fun insert(uri: Uri?, values: ContentValues?): Uri? {
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
         return null
     }
 
-    override fun query(uri: Uri?, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor? {
+    override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor? {
         return null
     }
 
     override fun onCreate(): Boolean {
-        WorkManager.initialize(getContext(), Configuration.Builder()
+        WorkManager.initialize(context!!, Configuration.Builder()
                 .setMinimumLoggingLevel(Log.INFO)
                 .setMaxSchedulerLimit(50)
                 .build());
         return true;
     }
 
-    override fun update(uri: Uri?, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
+    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
         return 0
     }
 
-    override fun delete(uri: Uri?, selection: String?, selectionArgs: Array<out String>?): Int {
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
         return 0
     }
 
-    override fun getType(uri: Uri?): String? {
+    override fun getType(uri: Uri): String? {
         return null
     }
 

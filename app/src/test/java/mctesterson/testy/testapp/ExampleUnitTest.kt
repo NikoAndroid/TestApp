@@ -1,4 +1,4 @@
-package mctesterson.testy.workmanager_test
+package mctesterson.testy.testapp
 
 import org.junit.Test
 

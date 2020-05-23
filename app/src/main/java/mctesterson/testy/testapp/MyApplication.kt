@@ -1,9 +1,6 @@
-package mctesterson.testy.workmanager_test
+package mctesterson.testy.testapp
 
 import android.app.Application
-import android.util.Log
-import androidx.work.Configuration
-import androidx.work.WorkManager
 import com.evernote.android.job.JobManager
 
 

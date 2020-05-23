@@ -1,4 +1,4 @@
-package mctesterson.testy.workmanager_test
+package mctesterson.testy.testapp
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("mctesterson.testy.workmanager_test", appContext.packageName)
+        assertEquals("mctesterson.testy.testapp", appContext.packageName)
     }
 }

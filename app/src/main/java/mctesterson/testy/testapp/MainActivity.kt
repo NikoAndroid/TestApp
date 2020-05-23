@@ -1,4 +1,4 @@
-package mctesterson.testy.workmanager_test
+package mctesterson.testy.testapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,11 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.work.Configuration
-import androidx.work.WorkManager
 import com.evernote.android.job.JobManager
-import com.evernote.android.job.JobRequest
-import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {

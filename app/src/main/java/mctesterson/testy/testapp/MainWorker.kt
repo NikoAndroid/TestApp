@@ -1,18 +1,14 @@
-package mctesterson.testy.workmanager_test
+package mctesterson.testy.testapp
 
 import android.annotation.SuppressLint
 import android.app.job.JobScheduler
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.WorkerThread
 import androidx.work.Constraints
 import androidx.work.Data
-import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -52,7 +48,7 @@ class MainWorker(context: Context, params: WorkerParameters): Worker(context, pa
                 Log.d(TAG, "Submitting work with no delay")
             }
             val builtWorker = worker.build()
-            
+
             Log.d("NIKO", "enqueing worker with id=${builtWorker.id}  other id=${builtWorker.workSpec.id}")
             WorkManager.getInstance().enqueue(builtWorker)
 //            WorkManager.getInstance().beginUniqueWork(WORK_TAG, ExistingWorkPolicy.KEEP, worker.build()).enqueue()
