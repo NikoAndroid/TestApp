@@ -14,7 +14,7 @@ class EvernoteJob: Job() {
             Log.d(TAG, "scheduling evernote daily job")
             JobRequest.Builder(EvernoteJob.TAG)
                     .setUpdateCurrent(false)
-                    .setPeriodic(TimeUnit.DAYS.toMillis(1))
+                    .setPeriodic(TimeUnit.MINUTES.toMillis(15))
                     .build()
                     .schedule()
         }

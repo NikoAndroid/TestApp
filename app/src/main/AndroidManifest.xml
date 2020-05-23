@@ -22,6 +22,9 @@
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
             tools:node="remove"/>
+        <provider
+            android:authorities="${applicationId}.workmanager-init"
+            android:name="mctesterson.testy.workmanager_test.WorkManagerInitializer"/>
     </application>
 
 </manifest>

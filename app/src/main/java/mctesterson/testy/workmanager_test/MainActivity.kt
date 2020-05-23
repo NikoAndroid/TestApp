@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         buttonEnqueueNow = findViewById(R.id.button_now)
         buttonEnqueueNow.setOnClickListener { _ ->
+            Log.d(TAG, "button pressed")
             MainWorker.submitNewWork(applicationContext, false)
         }
 
