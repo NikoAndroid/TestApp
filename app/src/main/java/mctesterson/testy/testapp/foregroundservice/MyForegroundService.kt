@@ -177,10 +177,15 @@ class MyForegroundService : Service(), IForegroundService {
             PendingIntent.getActivity(this, 0, notificationIntent, 0)
         }
 
+        val title = getString(options.notificationTitleRes)
         val builder = NotificationCompat.Builder(this, options.channelId)
-                .setContentTitle(getString(options.notificationTitleRes))
+                .setContentTitle(title)
+                .setTicker(title)
                 .setSmallIcon(options.smallIconRes)
                 .setContentIntent(pendingIntent)
+                .setUsesChronometer(true)
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+
         options.smallIconColorRes?.let {
             builder.color = ContextCompat.getColor(applicationContext, it)
         }

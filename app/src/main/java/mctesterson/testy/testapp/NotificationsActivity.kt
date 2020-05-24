@@ -17,7 +17,6 @@ import mctesterson.testy.testapp.notifications.ChannelUtil
 import mctesterson.testy.testapp.notifications.NotificationData
 import mctesterson.testy.testapp.notifications.NotificationUtil
 
-
 class NotificationsActivity : AppCompatActivity() {
 
     companion object {
@@ -32,17 +31,18 @@ class NotificationsActivity : AppCompatActivity() {
     private lateinit var edittextNotificationTag: EditText
     private lateinit var edittextNotificationTitle: EditText
     private lateinit var edittextNotificationMessage: EditText
+    private lateinit var edittextGroupId: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notifications)
-
 
         edittextNotificationId = findViewById(R.id.edit_notification_id)
         edittextNotificationTag = findViewById(R.id.edit_notification_tag)
         edittextNotificationTitle = findViewById(R.id.edit_notification_title)
         edittextNotificationMessage = findViewById(R.id.edit_notification_message)
         edittextChannelName = findViewById(R.id.edit_channel_name)
+        edittextGroupId = findViewById(R.id.edit_group_id)
 
         findViewById<Spinner>(R.id.channel_importance).apply {
             val items = ChannelImportance.values().map { it.name }
@@ -55,6 +55,11 @@ class NotificationsActivity : AppCompatActivity() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
+        }
+
+        val channels = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) ChannelUtil.getChannelNames(applicationContext) else listOf()
+        channels.firstOrNull()?.let {
+            edittextChannelName.setText(it)
         }
     }
 
@@ -98,12 +103,56 @@ class NotificationsActivity : AppCompatActivity() {
             Toast.makeText(this, "NotificationId must be an int", Toast.LENGTH_SHORT).show()
             return
         }
+
+        val groupId = edittextGroupId.text.toString().let { if (it.isBlank()) null else it }
         NotificationUtil.buildAndSendNotification(applicationContext, NotificationData(
                 notificationId = notificationId,
                 notificationTag = edittextNotificationTag.text.toString(),
+                groupId = groupId,
                 channelId = ChannelUtil.getChannelId(edittextChannelName.text.toString()),
                 title = edittextNotificationTitle.text.toString(),
-                message = edittextNotificationMessage.text.toString()
+                message = edittextNotificationMessage.text.toString(),
+                shouldGroup = false
         ))
+    }
+
+    fun sendGroupedNotifications(view: View) {
+        val notificationId = edittextNotificationId.text.toString().toIntOrNull()
+        if (notificationId == null) {
+            Toast.makeText(this, "NotificationId must be an int", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val groupId = edittextGroupId.text.toString().let { if (it.isBlank()) null else it }
+        val notificationDatas = IntArray(4).mapIndexed { index, _ ->
+            NotificationData(
+                    notificationId = notificationId + index,
+                    notificationTag = edittextNotificationTag.text.toString(),
+                    groupId = groupId,
+                    channelId = ChannelUtil.getChannelId(edittextChannelName.text.toString()),
+                    title = edittextNotificationTitle.text.toString() + index,
+                    message = edittextNotificationMessage.text.toString() + index
+            )
+        }
+
+        val showingDatas = mutableListOf<NotificationData>()
+
+        for (i in 0 until notificationDatas.size) {
+            val data = notificationDatas[i].copy(
+                    time = System.currentTimeMillis(),
+                    shouldGroup = false //i != 0 // first one should alert, the others should not
+            )
+            showingDatas.add(data)
+
+            when (i) {
+                2, 3 -> {
+                    Thread.sleep(3000)
+                }
+            }
+
+            NotificationUtil.buildAndSendNotification(applicationContext, data)
+            NotificationUtil.buildAndSendGroupNotification(applicationContext, showingDatas)
+        }
+
     }
 }

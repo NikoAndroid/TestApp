@@ -19,9 +19,11 @@ data class NotificationData(
         val notificationId: Int,
         val notificationTag: String?,
         val channelId: String,
+        val groupId: String?,
         val title: String,
         val message: String,
-        val time: Long = System.currentTimeMillis()
+        val time: Long = System.currentTimeMillis(),
+        val shouldGroup: Boolean = false
 ) {
     fun getCommonExtras(): Bundle {
         return Bundle().apply {
@@ -32,7 +34,6 @@ data class NotificationData(
 }
 
 private const val PACKAGE = "${BuildConfig.APPLICATION_ID}.notification."
-private const val GROUPID = "groupid"
 const val ACTION_OPEN_NOTIFICATION = PACKAGE + "ACTION_OPEN_NOTIFICATION"
 const val ACTION_DISMISS_NOTIFICATION = PACKAGE + "ACTION_DISMISS_NOTIFICATION"
 const val NOTIFICATION_MESSAGE_REPLY = PACKAGE + "NOTIFICATION_MESSAGE_REPLY"
@@ -73,6 +74,38 @@ object NotificationUtil {
         return notification
     }
 
+    fun buildAndSendGroupNotification(appContext: Context, notificationDatas: List<NotificationData>): Notification {
+        val firstData = notificationDatas.first()
+        val title = "Notification group (${firstData.groupId})"
+
+        val inboxStyle = NotificationCompat.InboxStyle()
+                .setBigContentTitle(title)
+
+        notificationDatas.forEach {
+            inboxStyle.addLine(it.title)
+        }
+
+        val groupNotificationData = firstData.copy(
+                notificationId = firstData.groupId.hashCode(),
+                title = title,
+                message = ""
+        )
+
+        val notification = getNotificationBuilder(appContext, groupNotificationData)
+                .setSubText("subtext")
+                .setStyle(inboxStyle)
+                .setWhen(notificationDatas.sortedByDescending { it.time }.first().time)
+                .setNumber(notificationDatas.size)
+                .setGroupSummary(true)
+                .setOnlyAlertOnce(true)
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+                .build()
+
+        val notificationManager = NotificationManagerCompat.from(appContext) // using compat for compatibility with some wear devices on 4.4
+        notificationManager.notify(groupNotificationData.notificationTag, groupNotificationData.notificationId, notification)
+        return notification
+    }
+
     private fun getNotificationBuilder(appContext: Context, notificationData: NotificationData): NotificationCompat.Builder {
         val resources = appContext.resources
         val builder = NotificationCompat.Builder(appContext, notificationData.channelId)
@@ -103,13 +136,21 @@ object NotificationUtil {
                 .setContentTitle(notificationData.title)
                 .setContentText(notificationData.message)
                 .setWhen(notificationData.time)
-                .setPriority(NotificationCompat.PRIORITY_HIGH) // before channels
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT) // before channels
                 .setSmallIcon(R.drawable.ic_robber_white)
                 .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
                 .setLights(ContextCompat.getColor(appContext, R.color.notificationLED), 100, 100)
                 .setColor(ContextCompat.getColor(appContext, R.color.notificationIconcolor))
-                .setGroup(GROUPID)
                 .setGroupSummary(false)
+
+        notificationData.groupId?.let {
+            builder.setGroup(it)
+        }
+
+        if (notificationData.shouldGroup) {
+            builder.setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY) // you can also always just set this and it disables alerts for individual messages without notifications
+        }
 
         // Notification replies are only supported on N+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
