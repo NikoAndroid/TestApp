@@ -3,7 +3,6 @@ package mctesterson.testy.testapp
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.provider.Settings
 import android.view.View
 import android.widget.AdapterView
@@ -17,18 +16,13 @@ import mctesterson.testy.testapp.notifications.ChannelImportance
 import mctesterson.testy.testapp.notifications.ChannelUtil
 import mctesterson.testy.testapp.notifications.NotificationData
 import mctesterson.testy.testapp.notifications.NotificationUtil
-import mctesterson.testy.testapp.workmanager.MainWorker
 
 
 class NotificationsActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "NotificationsTag"
-        private const val REFRESH_FREQ = 1000L
     }
-
-    private val uiHandler = Handler()
-    private var isForeground = false
 
     private lateinit var edittextChannelName: EditText
     private var vibrate: Boolean = false
@@ -38,9 +32,6 @@ class NotificationsActivity : AppCompatActivity() {
     private lateinit var edittextNotificationTag: EditText
     private lateinit var edittextNotificationTitle: EditText
     private lateinit var edittextNotificationMessage: EditText
-
-
-    //private lateinit var mModel: CountViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,24 +105,5 @@ class NotificationsActivity : AppCompatActivity() {
                 title = edittextNotificationTitle.text.toString(),
                 message = edittextNotificationMessage.text.toString()
         ))
-    }
-
-    override fun onResume() {
-        isForeground = true
-
-        uiHandler.postDelayed(object : Runnable {
-            override fun run() {
-                if (isForeground) {
-                    WorkManagerCounterSingleton.getTotalEnqueued().postValue(MainWorker.getNumberWorksQueued(applicationContext))
-                    uiHandler.postDelayed(this, REFRESH_FREQ)
-                }
-            }
-        }, REFRESH_FREQ)
-        super.onResume()
-    }
-
-    override fun onPause() {
-        isForeground = false
-        super.onPause()
     }
 }

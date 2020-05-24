@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Niko\'s Test App</string>
     <string name="reply">Reply</string>
+    <string name="foregroundNotification">Foreground notification</string>
 </resources>

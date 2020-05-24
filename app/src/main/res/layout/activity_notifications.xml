@@ -41,9 +41,11 @@
     <Spinner
         android:id="@+id/channel_importance"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         app:layout_constraintTop_toTopOf="@id/edit_channel_name"
         app:layout_constraintStart_toEndOf="@id/edit_channel_name"
         app:layout_constraintEnd_toStartOf="@id/checkbox_vibrate"/>

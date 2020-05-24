@@ -24,6 +24,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, NotificationsActivity::class.java))
         }
 
+        findViewById<Button>(R.id.button_foreground_service).setOnClickListener { _ ->
+            startActivity(Intent(this, ForegroundServiceActivity::class.java))
+        }
+
     }
 
 }

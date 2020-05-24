@@ -6,4 +6,5 @@
 
     <color name="notificationLED">#ff8833</color>
     <color name="notificationIconcolor">#ff8833</color>
+    <color name="notificationIconcolor2">#335599</color>
 </resources>

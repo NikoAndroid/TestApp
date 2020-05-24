@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="mctesterson.testy.testapp">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
     <application
         android:name="mctesterson.testy.testapp.MyApplication"
         android:allowBackup="true"
@@ -22,6 +26,7 @@
 
         <activity android:name="mctesterson.testy.testapp.WorkManagerActivity" />
         <activity android:name="mctesterson.testy.testapp.NotificationsActivity" />
+        <activity android:name="mctesterson.testy.testapp.ForegroundServiceActivity" />
 
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
@@ -33,6 +38,7 @@
             android:name="mctesterson.testy.testapp.workmanager.WorkManagerInitializer"/>
 
         <service android:name=".notifications.NotificationActionService" />
+        <service android:name=".foregroundservice.MyForegroundService" />
     </application>
 
 </manifest>

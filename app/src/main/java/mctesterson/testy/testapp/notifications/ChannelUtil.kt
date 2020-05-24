@@ -65,4 +65,17 @@ object ChannelUtil {
 
         Log.d(TAG, "Deleted all channels")
     }
+
+
+    fun getChannels(appContext: Context): List<NotificationChannel> {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager = appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.notificationChannels
+        } else emptyList()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getChannelNames(appContext: Context): List<String> {
+        return getChannels(appContext).map { it.name.toString() }
+    }
 }
