@@ -25,4 +25,16 @@
         android:layout_height="wrap_content"
         android:text="Foreground service" />
 
+    <Button
+        android:id="@+id/button_intents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Intents" />
+
+    <Button
+        android:id="@+id/button_dummy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dummy" />
+
 </LinearLayout>

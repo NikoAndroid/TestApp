@@ -21,9 +21,11 @@ class NotificationsActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "NotificationsTag"
+        const val INTENT_ACTION = "mctesterson.testy.testapp.NOTIFICATIONS"
     }
 
     private lateinit var edittextChannelName: EditText
+    private lateinit var edittextChannelGroupName: EditText
     private var vibrate: Boolean = false
     private var importance = ChannelImportance.DEFAULT
 
@@ -42,7 +44,8 @@ class NotificationsActivity : AppCompatActivity() {
         edittextNotificationTitle = findViewById(R.id.edit_notification_title)
         edittextNotificationMessage = findViewById(R.id.edit_notification_message)
         edittextChannelName = findViewById(R.id.edit_channel_name)
-        edittextGroupId = findViewById(R.id.edit_group_id)
+        edittextChannelGroupName = findViewById(R.id.edit_channel_group_name)
+        edittextGroupId = findViewById(R.id.edit_group_id) // notification group
 
         findViewById<Spinner>(R.id.channel_importance).apply {
             val items = ChannelImportance.values().map { it.name }
@@ -65,7 +68,7 @@ class NotificationsActivity : AppCompatActivity() {
 
     fun createChannel(view: View) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ChannelUtil.createChannel(applicationContext, edittextChannelName.text.toString(), importance, vibrate)
+            ChannelUtil.createChannel(applicationContext, edittextChannelName.text.toString(), importance, vibrate, edittextChannelGroupName.text.toString())
         } else {
             Toast.makeText(applicationContext, "Channels are only api 26+", Toast.LENGTH_SHORT).show()
         }
@@ -82,6 +85,14 @@ class NotificationsActivity : AppCompatActivity() {
     fun deleteAllChannels(view: View) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ChannelUtil.deleteAllChannels(applicationContext)
+        } else {
+            Toast.makeText(applicationContext, "Channels are only api 26+", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun deleteChannelGroup(view: View) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ChannelUtil.deleteChannelGroup(applicationContext, edittextChannelGroupName.text.toString())
         } else {
             Toast.makeText(applicationContext, "Channels are only api 26+", Toast.LENGTH_SHORT).show()
         }

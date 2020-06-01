@@ -67,8 +67,13 @@ data class ReplyAction(
 }
 
 object NotificationUtil {
-    fun buildAndSendNotification(appContext: Context, notificationData: NotificationData): Notification {
-        val notification = getNotificationBuilder(appContext, notificationData).build()
+    fun buildAndSendNotification(appContext: Context, notificationData: NotificationData, f: ((builder: NotificationCompat.Builder) -> Unit)? = null): Notification {
+        val builder = getNotificationBuilder(appContext, notificationData)
+
+        // allow caller to add additional things to builder
+        f?.invoke(builder)
+
+        val notification = builder.build()
         val notificationManager = NotificationManagerCompat.from(appContext) // using compat for compatibility with some wear devices on 4.4
         notificationManager.notify(notificationData.notificationTag, notificationData.notificationId, notification)
         return notification

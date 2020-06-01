@@ -19,14 +19,27 @@
         <activity android:name="mctesterson.testy.testapp.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity android:name="mctesterson.testy.testapp.WorkManagerActivity" />
-        <activity android:name="mctesterson.testy.testapp.NotificationsActivity" />
+        <activity android:name="mctesterson.testy.testapp.NotificationsActivity">
+            <intent-filter>
+                <action android:name="mctesterson.testy.testapp.NOTIFICATIONS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name="mctesterson.testy.testapp.ForegroundServiceActivity" />
+        <activity android:name=".IntentsActivity" />
+        <activity android:name=".DummyActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="mctesterson.testy.testapp.DUMMY" />
+                <category android:name="android.intent.category.DEFAULT" />
+<!--                <data android:scheme="testapp"/>-->
+            </intent-filter>
+        </activity>
 
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"

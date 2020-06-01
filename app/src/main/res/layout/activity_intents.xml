@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ForegroundServiceActivity">
+    tools:context=".IntentsActivity">
 
 
     <!--  Channels  -->
@@ -34,38 +34,49 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
-        android:id="@+id/button_stop"
+        android:id="@+id/button_send_intent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Stop service"
+        android:text="Send explicit intent"
         android:layout_marginTop="24dp"
-        android:onClick="stopService"
+        android:onClick="sendExplicitIntent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_channel" />
 
 
     <Button
-        android:id="@+id/button_start"
+        android:id="@+id/button_stack_builder"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Start service"
+        android:text="Send stack builder intent"
         android:layout_marginTop="12dp"
-        android:onClick="startService"
+        android:onClick="sendIntentThroughStackBuilder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_stop" />
+        app:layout_constraintTop_toBottomOf="@id/button_send_intent" />
 
     <Button
-        android:id="@+id/button_start_with_timer"
+        android:id="@+id/button_implicit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Start service for 5 seconds"
+        android:text="Send implicit intent"
         android:layout_marginTop="12dp"
-        android:onClick="startServiceWithTimer"
+        android:onClick="sendImplicitIntent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_start" />
+        app:layout_constraintTop_toBottomOf="@id/button_stack_builder" />
+
+    <Button
+        android:id="@+id/button_main"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Send intent to MainActivity"
+        android:layout_marginTop="12dp"
+        android:onClick="sendMainActivityIntent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_implicit" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

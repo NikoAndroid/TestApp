@@ -1,6 +1,7 @@
 package mctesterson.testy.testapp.notifications
 
 import android.app.NotificationChannel
+import android.app.NotificationChannelGroup
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
@@ -27,8 +28,9 @@ object ChannelUtil {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun createChannel(appContext: Context, channelName: String, channelImportance: ChannelImportance, vibrate: Boolean) {
+    fun createChannel(appContext: Context, channelName: String, channelImportance: ChannelImportance, vibrate: Boolean, groupName: String) {
         val notificationManager = appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val createChannelGroup = groupName.isNotBlank()
 
         val channelId = getChannelId(channelName)
         val notificationChannel = NotificationChannel(channelId, channelName, channelImportance.value).apply {
@@ -40,6 +42,11 @@ object ChannelUtil {
 //            setSound(it, AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build())
 //        }
 
+        }
+
+        if (createChannelGroup) {
+            notificationChannel.group = groupName
+            createChannelGroup(appContext, groupName)
         }
 
         notificationManager.createNotificationChannel(notificationChannel)
@@ -66,6 +73,21 @@ object ChannelUtil {
         Log.d(TAG, "Deleted all channels")
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun deleteChannelGroup(appContext: Context, groupName: String) {
+        val notificationManager = appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.deleteNotificationChannelGroup(groupName)
+
+        Log.d(TAG, "Deleted channel group: $groupName")
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createChannelGroup(appContext: Context, groupName: String) {
+        val notificationManager = appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannelGroup(NotificationChannelGroup(groupName, groupName))
+
+        Log.d(TAG, "created channel group: $groupName")
+    }
 
     fun getChannels(appContext: Context): List<NotificationChannel> {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

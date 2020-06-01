@@ -10,7 +10,6 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import mctesterson.testy.testapp.foregroundservice.MyForegroundService
 import mctesterson.testy.testapp.notifications.ChannelUtil
-import java.lang.IllegalStateException
 import java.util.concurrent.atomic.AtomicBoolean
 
 
