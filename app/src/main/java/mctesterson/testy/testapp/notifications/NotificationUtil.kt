@@ -1,6 +1,7 @@
 package mctesterson.testy.testapp.notifications
 
 import android.app.Notification
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -28,6 +29,7 @@ data class NotificationData(
     fun getCommonExtras(): Bundle {
         return Bundle().apply {
             putInt(EXTRA_NOTIFICATION_ID, notificationId)
+            putString(EXTRA_CHANNEL_ID, channelId)
             putBoolean(EXTRA_IS_SUMMARY, false)
         }
     }
@@ -37,9 +39,10 @@ private const val PACKAGE = "${BuildConfig.APPLICATION_ID}.notification."
 const val ACTION_OPEN_NOTIFICATION = PACKAGE + "ACTION_OPEN_NOTIFICATION"
 const val ACTION_DISMISS_NOTIFICATION = PACKAGE + "ACTION_DISMISS_NOTIFICATION"
 const val NOTIFICATION_MESSAGE_REPLY = PACKAGE + "NOTIFICATION_MESSAGE_REPLY"
-const val EXTRA_NOTIFICATION_ID = PACKAGE +"notificationId"
-const val EXTRA_IS_SUMMARY = PACKAGE + "isSummary"
-const val EXTRA_NOTIFICATION_ACTION_ID = PACKAGE + "actionId"
+const val EXTRA_NOTIFICATION_ID = "notificationId"
+const val EXTRA_CHANNEL_ID = "channelId"
+const val EXTRA_IS_SUMMARY = "isSummary"
+const val EXTRA_NOTIFICATION_ACTION_ID = "actionId"
 
 sealed class NotificationBuilderAction {
     abstract val id: String
@@ -111,6 +114,27 @@ object NotificationUtil {
         return notification
     }
 
+    fun addReplyToNotificationHistoryAndSend(appContext: Context, channelId: String, notificationId: Int, replyHistory: List<String>, f: ((builder: NotificationCompat.Builder) -> Unit)? = null): Notification {
+//        val builder = getNotificationBuilder(appContext, notificationData)
+        val msg = "Message sent"
+        val builder = NotificationCompat.Builder(appContext, channelId)
+            .setSmallIcon(R.drawable.ic_robber_white)
+            .setTicker(msg) // accessibility
+            .setContentTitle(msg)
+            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+            .setOnlyAlertOnce(true)
+
+//            .setRemoteInputHistory(replyHistory.toTypedArray())
+
+        // allow caller to add additional things to builder
+        f?.invoke(builder)
+
+        val notification = builder.build()
+        val notificationManager = NotificationManagerCompat.from(appContext) // using compat for compatibility with some wear devices on 4.4
+        notificationManager.notify("", notificationId, notification)
+        return notification
+    }
+
     private fun getNotificationBuilder(appContext: Context, notificationData: NotificationData): NotificationCompat.Builder {
         val resources = appContext.resources
         val builder = NotificationCompat.Builder(appContext, notificationData.channelId)
@@ -171,5 +195,10 @@ object NotificationUtil {
         }
 
         return builder
+    }
+
+    fun cancelNotification(appContext: Context, notificationId: Int, notificationTag: String?) {
+        val notificationManager = appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(notificationTag, notificationId)
     }
 }

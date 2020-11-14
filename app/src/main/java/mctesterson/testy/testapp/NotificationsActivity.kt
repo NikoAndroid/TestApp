@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -12,10 +13,15 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.documentfile.provider.DocumentFile
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import mctesterson.testy.testapp.notifications.ChannelImportance
 import mctesterson.testy.testapp.notifications.ChannelUtil
 import mctesterson.testy.testapp.notifications.NotificationData
 import mctesterson.testy.testapp.notifications.NotificationUtil
+import java.io.File
 
 class NotificationsActivity : AppCompatActivity() {
 
@@ -63,6 +69,18 @@ class NotificationsActivity : AppCompatActivity() {
         val channels = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) ChannelUtil.getChannelNames(applicationContext) else listOf()
         channels.firstOrNull()?.let {
             edittextChannelName.setText(it)
+        }
+
+        val channels2 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) ChannelUtil.getChannels(applicationContext) else listOf()
+        channels2.forEach {
+            val uri = it.sound!!
+            val id = it.id
+//            val exists = File(uri.toString()).exists()
+            val resolver = application.contentResolver
+//            resolver.//openFile(uri, "rw", null)
+            val doc = DocumentFile.fromSingleUri(applicationContext, uri)!!
+            val exists = doc.exists()
+            Log.d(TAG, "${uri.toString()}  exists=$exists id=$id")
         }
     }
 

@@ -14,6 +14,9 @@ import android.text.format.DateUtils
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import mctesterson.testy.testapp.ForegroundServiceActivity
 import mctesterson.testy.testapp.R
 import java.lang.ref.WeakReference
@@ -59,9 +62,13 @@ class MyForegroundService : Service(), IForegroundService {
             val intent = getIntent(application).apply {
                 putExtras(options.toBundle())
             }
+            // need to also check channel here before starting service
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                application.startForegroundService(intent)
+//                application.startForegroundService(intent)
+                application.startService(intent)
+
             } else {
+                // make sure not to start in background on oreo and up
                 application.startService(intent)
             }
         }
@@ -120,6 +127,13 @@ class MyForegroundService : Service(), IForegroundService {
 
     override fun onCreate() {
         super.onCreate()
+
+        val notification = buildForegroundNotification(Options(
+            notificationTitleRes = R.string.reply,
+            channelId = "b"
+        ))
+        startForeground(1, notification)
+
         handler = StopServiceHandler(this)
         instance = this
     }
@@ -136,7 +150,11 @@ class MyForegroundService : Service(), IForegroundService {
         // No need for foreground service below Oreo
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d(TAG, "starting foreground")
-            startForeground(1, buildForegroundNotification(options))
+            GlobalScope.launch {
+                delay(15000)
+                startForeground(1, buildForegroundNotification(options))
+
+            }
         }
 
         handler.removeMessages(MSG_STOP_SERVICE)
